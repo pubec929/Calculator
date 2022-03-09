@@ -19,7 +19,6 @@ body {
 	min-height: 100vh;
 	grid-template-columns: repeat(4, 100px);
 	grid-template-rows: minmax(120px, auto) repeat(5, 100px);
-	border-radius: 0.5em;
 }
 
 .calculator-grid > button {
@@ -47,6 +46,7 @@ body {
 	flex-direction: column;
 	padding: 10px;
 	word-wrap: break-word;
+	word-break: break-all;
 }
 
 .output .previous-operand {
@@ -57,8 +57,4 @@ body {
 .output .current-operand {
 	color: white;
 	font-size: 2.5rem;
-}
-
-.button-equal {
-	background-color: #47b1e9 !important;
 }
