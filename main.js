@@ -22,6 +22,17 @@ class Calculator {
 		this.currentOperand = this.currentOperand.toString() + number.toString();
 	}
 
+	changeSign() {
+		if (this.currentOperand[0] != '-') {
+			this.currentOperand = `-${this.currentOperand}`;
+		} else {
+			this.currentOperand = this.currentOperand.slice(
+				1,
+				this.currentOperand.length,
+			);
+		}
+	}
+
 	chooseOperation(operation) {
 		if (this.currentOperand === '') return;
 		if (this.previousOperand !== '') {
@@ -31,6 +42,7 @@ class Calculator {
 		this.previousOperand = this.currentOperand;
 		this.currentOperand = '';
 	}
+
 	compute() {
 		let computation;
 		const prev = parseFloat(this.previousOperand);
@@ -53,9 +65,12 @@ class Calculator {
 			default:
 				return;
 		}
+		this.previousOperand = `${this.getDisplayNumber(this.previousOperand)} ${
+			this.operation
+		} ${this.getDisplayNumber(this.currentOperand)} =`;
+		console.log(this.previousOperand);
 		this.currentOperand = computation;
 		this.operation = undefined;
-		this.previousOperand = '';
 	}
 
 	getDisplayNumber(number) {
@@ -86,19 +101,11 @@ class Calculator {
 				this.previousOperand,
 			)} ${this.operation}`;
 		} else {
-			this.previousOperandTextElement.innerText = this.getDisplayNumber(
-				this.previousOperand,
-			);
+			this.previousOperandTextElement.innerText = this.previousOperand;
 		}
 	}
 }
-/*
-const numberButtons = document.querySelectorAll('[data-number]');
-const operationButtons = document.querySelectorAll('[data-operation]');
-const equalsButton = document.querySelector('[data-equals]');
-const deleteButton = document.querySelector('[data-delete]');
-const allClearButton = document.querySelector('[data-all-clear]');
-*/
+
 const previousOperandTextElement = document.querySelector(
 	'[data-previous-operand]',
 );
@@ -110,37 +117,6 @@ const calculator = new Calculator(
 	previousOperandTextElement,
 	currentOperandTextElement,
 );
-
-/*
-numberButtons.forEach((button) => {
-	button.addEventListener('click', () => {
-		calculator.appendNumber(button.innerText);
-		calculator.updateDisplay();
-	});
-});
-
-operationButtons.forEach((button) => {
-	button.addEventListener('click', () => {
-		calculator.chooseOperation(button.innerText);
-		calculator.updateDisplay();
-	});
-});
-
-allClearButton.addEventListener('click', () => {
-	calculator.clear();
-	calculator.updateDisplay();
-});
-
-equalsButton.addEventListener('click', () => {
-	calculator.compute();
-	calculator.updateDisplay();
-});
-
-deleteButton.addEventListener('click', () => {
-	calculator.delete();
-	calculator.updateDisplay();
-});
-*/
 
 // start Interaction
 document.addEventListener('click', handleMouseClick);
@@ -157,6 +133,8 @@ function handleMouseClick(e) {
 		calculator.delete();
 	} else if (e.target.matches('[data-equals]')) {
 		calculator.compute();
+	} else if (e.target.matches(['[data-sign]'])) {
+		calculator.changeSign();
 	} else {
 		return;
 	}
@@ -167,10 +145,12 @@ function handleMouseClick(e) {
 function handleKeyPress(e) {
 	operators = ['*', '/', ':', '+', '-'];
 
-	if (e.key.match(/[0-9]/)) {
+	if (e.key.match(/[0-9]/) || e.key === '.') {
 		calculator.appendNumber(e.key);
 	} else if (e.key === 'Backspace' || e.key === 'Delete') {
 		calculator.delete();
+	} else if (e.key.toLowerCase() === 'c') {
+		calculator.clear();
 	} else if (e.key === 'Enter') {
 		calculator.compute();
 	} else if (operators.includes(e.key)) {
