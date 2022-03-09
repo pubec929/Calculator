@@ -12,6 +12,10 @@ class Calculator {
 	}
 
 	delete() {
+		console.log(this.currentOperand, this.previousOperand.includes('='));
+		if (this.previousOperand.includes('=')) {
+			this.previousOperand = '';
+		}
 		this.currentOperand = this.currentOperand.toString().slice(0, -1);
 	}
 
@@ -49,6 +53,7 @@ class Calculator {
 		const current = parseFloat(this.currentOperand);
 
 		if (isNaN(prev) || isNaN(current)) return;
+		console.log(this.operation);
 		switch (this.operation) {
 			case '+':
 				computation = prev + current;
@@ -62,13 +67,16 @@ class Calculator {
 			case '÷':
 				computation = prev / current;
 				break;
+			case '^':
+				computation = Math.pow(prev, current);
+				break;
 			default:
 				return;
 		}
+
 		this.previousOperand = `${this.getDisplayNumber(this.previousOperand)} ${
 			this.operation
 		} ${this.getDisplayNumber(this.currentOperand)} =`;
-		console.log(this.previousOperand);
 		this.currentOperand = computation;
 		this.operation = undefined;
 	}
@@ -143,22 +151,28 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-	operators = ['*', '/', ':', '+', '-'];
+	operators = ['*', '/', ':', '+', '-', '^'];
 
-	if (e.key.match(/[0-9]/) || e.key === '.') {
-		calculator.appendNumber(e.key);
-	} else if (e.key === 'Backspace' || e.key === 'Delete') {
+	let key = e.key; // asign e.key to key, cuz e.key isn't changeable
+
+	if (key === 'Dead') {
+		// key is Dead when the ^ key is just clicked once
+		key = '^';
+	}
+
+	if (key.match(/[0-9]/) || key === '.') {
+		calculator.appendNumber(key);
+	} else if (key === 'Backspace' || key === 'Delete') {
 		calculator.delete();
-	} else if (e.key.toLowerCase() === 'c') {
+	} else if (key.toLowerCase() === 'c') {
 		calculator.clear();
-	} else if (e.key === 'Enter') {
+	} else if (key === 'Enter') {
 		calculator.compute();
-	} else if (operators.includes(e.key)) {
-		let operator = e.key;
-		if (operator === '/' || operator === ':') {
-			operator = '÷';
+	} else if (operators.includes(key)) {
+		if (key === '/' || key === ':') {
+			key = '÷';
 		}
-		calculator.chooseOperation(operator);
+		calculator.chooseOperation(key);
 	}
 	calculator.updateDisplay();
 }
