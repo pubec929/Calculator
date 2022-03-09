@@ -92,13 +92,13 @@ class Calculator {
 		}
 	}
 }
-
-const userPassword = 3;
+/*
 const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');
 const equalsButton = document.querySelector('[data-equals]');
 const deleteButton = document.querySelector('[data-delete]');
 const allClearButton = document.querySelector('[data-all-clear]');
+*/
 const previousOperandTextElement = document.querySelector(
 	'[data-previous-operand]',
 );
@@ -111,6 +111,7 @@ const calculator = new Calculator(
 	currentOperandTextElement,
 );
 
+/*
 numberButtons.forEach((button) => {
 	button.addEventListener('click', () => {
 		calculator.appendNumber(button.innerText);
@@ -139,3 +140,45 @@ deleteButton.addEventListener('click', () => {
 	calculator.delete();
 	calculator.updateDisplay();
 });
+*/
+
+// start Interaction
+document.addEventListener('click', handleMouseClick);
+document.addEventListener('keydown', handleKeyPress);
+
+function handleMouseClick(e) {
+	if (e.target.matches('[data-number]')) {
+		calculator.appendNumber(e.target.innerText);
+	} else if (e.target.matches('[data-operation')) {
+		calculator.chooseOperation(e.target.innerText);
+	} else if (e.target.matches('[data-all-clear')) {
+		calculator.clear();
+	} else if (e.target.matches('[data-delete]')) {
+		calculator.delete();
+	} else if (e.target.matches('[data-equals]')) {
+		calculator.compute();
+	} else {
+		return;
+	}
+
+	calculator.updateDisplay();
+}
+
+function handleKeyPress(e) {
+	operators = ['*', '/', ':', '+', '-'];
+
+	if (e.key.match(/[0-9]/)) {
+		calculator.appendNumber(e.key);
+	} else if (e.key === 'Backspace' || e.key === 'Delete') {
+		calculator.delete();
+	} else if (e.key === 'Enter') {
+		calculator.compute();
+	} else if (operators.includes(e.key)) {
+		let operator = e.key;
+		if (operator === '/' || operator === ':') {
+			operator = '÷';
+		}
+		calculator.chooseOperation(operator);
+	}
+	calculator.updateDisplay();
+}
