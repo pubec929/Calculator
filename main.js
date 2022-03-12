@@ -25,6 +25,9 @@ class Calculator {
 	}
 
 	appendNumber(number) {
+		if (this.previousOperand.includes('=')) {
+			this.previousOperand = '';
+		}
 		if (number === '.' && this.currentOperand.includes('.')) {
 			return;
 		}
@@ -62,7 +65,6 @@ class Calculator {
 		const current = parseFloat(this.currentOperand);
 
 		if (isNaN(prev) || isNaN(current)) return;
-		console.log(this.operation);
 		switch (this.operation) {
 			case '+':
 				computation = prev + current;
@@ -91,21 +93,39 @@ class Calculator {
 	}
 
 	getDisplayNumber(number) {
-		const stringNumber = number.toString();
-		const integerDigits = parseFloat(stringNumber.split('.')[0]);
-		const decimalDigits = stringNumber.split('.')[1];
-		let integerDisplay;
-		if (isNaN(integerDigits)) {
-			integerDisplay = '';
-		} else {
-			integerDisplay = integerDigits.toLocaleString('en', {
-				maximumFractionDigits: 0,
-			});
+		number = number.toString();
+
+		if (!Number.isFinite(parseFloat(number))) {
+			this.currentOperand = '';
+			return '';
 		}
+
+		if (number.length <= 3) return number;
+
+		let sign = '';
+
+		if (number[0] === '-') {
+			sign = '-';
+			number = number.slice(1, number.length);
+		}
+
+		const integerDigits = [...number.split('.')[0]].reverse();
+		const decimalDigits = number.split('.')[1];
+
+		let formattedIntegerDigits = integerDigits.map((value, index) => {
+			if (index % 3 == 0 && index != 0) {
+				return `${value},`;
+			} else {
+				return value;
+			}
+		});
+
+		formattedIntegerDigits = formattedIntegerDigits.reverse().join('');
+
 		if (decimalDigits != null) {
-			return `${integerDisplay}.${decimalDigits}`;
+			return `${sign}${formattedIntegerDigits}.${decimalDigits}`;
 		} else {
-			return integerDisplay;
+			return `${sign}${formattedIntegerDigits}`;
 		}
 	}
 
@@ -123,6 +143,10 @@ class Calculator {
 	}
 
 	copy() {
+		if (this.currentOperand === '') {
+			return;
+		}
+
 		const invisibleInput = document.createElement('input');
 
 		invisibleInput.setAttribute('readonly', '');
@@ -160,6 +184,8 @@ const calculator = new Calculator(
 document.addEventListener('click', handleMouseClick);
 document.addEventListener('keydown', handleKeyPress);
 
+const operators = ['*', '/', ':', '+', '-', '^']; // valid operators
+
 function handleMouseClick(e) {
 	if (e.target.matches('[data-number]')) {
 		calculator.appendNumber(e.target.innerText);
@@ -183,8 +209,6 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-	operators = ['*', '/', ':', '+', '-', '^'];
-
 	let key = e.key; // asign e.key to key, cuz e.key isn't changeable
 
 	if (key === 'Dead') {
