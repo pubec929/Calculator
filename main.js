@@ -1,7 +1,12 @@
 class Calculator {
-	constructor(previousOperandTextElement, currentOperandTextElement) {
+	constructor(
+		previousOperandTextElement,
+		currentOperandTextElement,
+		copyButton,
+	) {
 		this.previousOperandTextElement = previousOperandTextElement;
 		this.currentOperandTextElement = currentOperandTextElement;
+		this.copyButton = copyButton;
 		this.clear();
 	}
 
@@ -27,6 +32,10 @@ class Calculator {
 	}
 
 	changeSign() {
+		if (this.previousOperand.includes('=')) {
+			this.previousOperand = '';
+		}
+
 		if (this.currentOperand[0] != '-') {
 			this.currentOperand = `-${this.currentOperand}`;
 		} else {
@@ -112,6 +121,24 @@ class Calculator {
 			this.previousOperandTextElement.innerText = this.previousOperand;
 		}
 	}
+
+	copy() {
+		const invisibleInput = document.createElement('input');
+
+		invisibleInput.setAttribute('readonly', '');
+
+		invisibleInput.classList.add('invisible');
+
+		document.body.appendChild(invisibleInput);
+
+		invisibleInput.value = this.currentOperand;
+
+		invisibleInput.select();
+
+		document.execCommand('copy');
+
+		document.body.removeChild(invisibleInput);
+	}
 }
 
 const previousOperandTextElement = document.querySelector(
@@ -121,9 +148,12 @@ const currentOperandTextElement = document.querySelector(
 	'[data-current-operand]',
 );
 
+const copyButton = document.querySelector('[data-copy]');
+
 const calculator = new Calculator(
 	previousOperandTextElement,
 	currentOperandTextElement,
+	copyButton,
 );
 
 // start Interaction
@@ -143,6 +173,8 @@ function handleMouseClick(e) {
 		calculator.compute();
 	} else if (e.target.matches(['[data-sign]'])) {
 		calculator.changeSign();
+	} else if (e.target.matches('[data-copy')) {
+		calculator.copy();
 	} else {
 		return;
 	}
