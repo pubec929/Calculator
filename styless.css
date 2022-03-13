@@ -57,12 +57,14 @@ body {
 	color: white;
 	font-size: 2.5rem;
 	user-select: all;
+	margin-bottom: 12px;
 }
 
 .copy-button-container {
 	position: absolute;
 	bottom: 0px;
 	right: 0px;
+	user-select: none;
 }
 
 .copy-button {

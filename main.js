@@ -55,7 +55,7 @@ class Calculator {
 			this.compute();
 		}
 		this.operation = operation;
-		this.previousOperand = this.currentOperand;
+		this.previousOperand = `${this.currentOperand}`;
 		this.currentOperand = '';
 	}
 
@@ -138,7 +138,7 @@ class Calculator {
 				this.previousOperand,
 			)} ${this.operation}`;
 		} else {
-			this.previousOperandTextElement.innerText = this.previousOperand;
+			this.previousOperandTextElement.innerText = `${this.previousOperand}`;
 		}
 	}
 
@@ -209,26 +209,31 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-	let key = e.key; // asign e.key to key, cuz e.key isn't changeable
+	console.log(e);
+	let key = e; // asign e to key, cuz e is immutable
 
-	if (key === 'Dead') {
-		// key is Dead when the ^ key is just clicked once
-		key = '^';
+	if (key.key === 'Dead') {
+		// key.key is Dead when the ^ key is just clicked once
+		key.key = '^';
 	}
 
-	if (key.match(/[0-9]/) || key === '.') {
-		calculator.appendNumber(key);
-	} else if (key === 'Backspace' || key === 'Delete') {
+	if (key.key.match(/[0-9]/) || key.key === '.') {
+		calculator.appendNumber(key.key);
+	} else if (key.key === 'Backspace' || key.key === 'Delete') {
 		calculator.delete();
-	} else if (key.toLowerCase() === 'c') {
-		calculator.clear();
-	} else if (key === 'Enter') {
+	} else if (key.key.toLowerCase() === 'c') {
+		if (key.ctrlKey) calculator.copy();
+		else calculator.clear();
+	} else if (key.key === 'Enter') {
 		calculator.compute();
-	} else if (operators.includes(key)) {
-		if (key === '/' || key === ':') {
-			key = '÷';
+	} else if (operators.includes(key.key)) {
+		if (key.key === '/' || key.key === ':') {
+			key.key = '÷';
 		}
-		calculator.chooseOperation(key);
+		if ((key.key === '-' && key.altKey) || (key.key === '+' && key.altKey)) {
+			console.log('clicked');
+			calculator.changeSign();
+		} else calculator.chooseOperation(key.key);
 	}
 	calculator.updateDisplay();
 }
