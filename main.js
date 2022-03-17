@@ -170,6 +170,7 @@ class Calculator {
 function switchTheme(theme) {
 	body.className = '';
 	body.classList.add(theme);
+	localStorage.setItem('theme', theme);
 }
 
 // Get DOM Elements
@@ -190,6 +191,13 @@ const calculator = new Calculator(
 	currentOperandTextElement,
 	copyButton,
 );
+
+// Read from local storage
+const theme = localStorage.getItem('theme');
+
+if (theme) {
+	body.classList.add(theme);
+}
 
 // start Interaction
 document.addEventListener('click', handleMouseClick);
