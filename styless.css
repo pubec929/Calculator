@@ -1,3 +1,69 @@
+:root {
+	/* All color gradients*/
+	--green-to-blue-gradient: linear-gradient(
+		45deg,
+		hsl(240deg 100% 20%) 0%,
+		hsl(223deg 100% 29%) 9%,
+		hsl(216deg 100% 36%) 17%,
+		hsl(211deg 100% 41%) 25%,
+		hsl(204deg 100% 43%) 33%,
+		hsl(195deg 100% 41%) 42%,
+		hsl(181deg 100% 37%) 53%,
+		hsl(164deg 100% 41%) 66%,
+		hsl(148deg 100% 46%) 82%,
+		hsl(126deg 100% 54%) 100%
+	);
+
+	--orange-to-red-gradient: linear-gradient(
+		45deg,
+		hsl(3deg 72% 55%) 0%,
+		hsl(11deg 81% 56%) 21%,
+		hsl(18deg 89% 56%) 30%,
+		hsl(24deg 95% 56%) 39%,
+		hsl(30deg 100% 54%) 46%,
+		hsl(37deg 100% 51%) 54%,
+		hsl(42deg 100% 50%) 61%,
+		hsl(47deg 100% 50%) 69%,
+		hsl(51deg 100% 50%) 79%,
+		hsl(56deg 97% 53%) 100%
+	);
+
+	/* Default gradient */
+	--blue-to-purple-gradient: linear-gradient(225deg, #00aaff, #a10add);
+
+	/* Colors for default main background */
+	--bg: var(--blue-to-purple-gradient);
+
+	/* Colors for output window*/
+	--output-bg: rgba(0, 0, 0, 0.75);
+	/* Text Color of current-operand*/
+	--output-current-operand: rgba(255, 255, 255, 1);
+	/* Text Color of previous-operand */
+	--output-previous-operand: rgba(255, 255, 255, 0.75);
+	/* Background Color of output window buttons*/
+	--output-button-bg: rgb(255, 255, 255, 0.25);
+
+	/* Colors of calculator grid*/
+	--grid-button-bg: rgba(255, 255, 255, 0.75);
+	--grid-button-bg-hover: rgba(255, 255, 255, 0.9);
+	--grid-button-border: rgba(255, 255, 255, 1);
+	--grid-text-color: rgba(0, 0, 0, 1);
+
+	/* Colors of navbar */
+	--nav-text-color: rgba(255, 255, 255, 1);
+	--nav-bg: rgba(0, 0, 0, 0.75);
+	--nav-dropdown-bg: rgba(255, 255, 255, 0.75);
+	--nav-dropdown-text-color: rgba(0, 0, 0, 1);
+}
+
+.green-to-blue {
+	--bg: var(--green-to-blue-gradient);
+}
+
+.orange-to-red {
+	--bg: var(--orange-to-red-gradient);
+}
+
 *,
 *::before,
 *::after {
@@ -7,37 +73,141 @@
 }
 
 body {
+	/*transition: background 5000ms ease-in-out, color 1000ms ease-in-out;*/
 	padding: 0;
 	margin: 0;
-	background: linear-gradient(225deg, #00aaff, #a10add);
+	background-image: var(--bg);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+	gap: 20px;
+	min-height: 100vh;
 }
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	color: currentColor;
+	text-decoration: none;
+}
+
+/* Navbar */
+.navbar {
+	color: var(--nav-text-color);
+	height: 50px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	background-color: var(--nav-bg);
+}
+
+.nav-ul {
+	padding: 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.nav-item > a {
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+.nav-item > a:hover {
+	text-decoration: underline;
+}
+
+.dropdown {
+	position: absolute;
+	width: auto;
+	opacity: 0;
+	z-index: 2;
+	background: var(--nav-dropdown-bg);
+
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	height: 3rem;
+	margin-top: 2rem;
+	padding: 0.5rem;
+
+	box-shadow: rgba(2, 8, 20, 0.1) 0px 0.175em 0.5em;
+
+	transform: translateX(-38%);
+	transition: opacity 0.15s ease-out;
+}
+.has-dropdown:focus-within .dropdown {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.dropdown-item a {
+	width: 100%;
+	height: 100%;
+	margin-left: 10px;
+	size: 0.7rem;
+	font-weight: bold;
+	user-select: none;
+	color: var(--nav-dropdown-text-color);
+}
+
+.dropdown-item a::before {
+	content: ' ';
+	border-radius: 50%;
+	width: 2rem;
+	height: 2rem;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+#green-to-blue::before {
+	background-image: var(--green-to-blue-gradient);
+}
+#orange-to-red::before {
+	background-image: var(--orange-to-red-gradient);
+}
+
+#blue-to-purple::before {
+	background-image: var(--blue-to-purple-gradient);
+}
+
+/* Calculator Grid */
 
 .calculator-grid {
 	display: grid;
-	justify-content: center;
-	align-content: center;
-	min-height: 100vh;
 	grid-template-columns: repeat(4, 100px);
 	grid-template-rows: minmax(120px, auto) repeat(5, 100px);
 }
 
 .calculator-grid > button {
 	cursor: pointer;
+	color: var(--grid-text-color);
 	font-size: 2rem;
-	border: 1px solid white;
+	border: 1px solid var(--grid-button-border);
 	outline: none;
-	background-color: rgba(255, 255, 255, 0.75);
+	background-color: var(--grid-button-bg);
 	user-select: none;
 }
 
 .calculator-grid > button:hover {
-	background-color: rgba(255, 255, 255, 0.9);
+	background-color: var(--grid-button-bg-hover);
 }
 
 .output {
-	grid-column: 1 / -1;
+	grid-column-start: 1;
+	grid-column-end: -1;
 	display: flex;
-	background-color: rgba(0, 0, 0, 0.75);
+	background-color: var(--output-bg);
 	align-items: flex-end;
 	justify-content: space-around;
 	flex-direction: column;
@@ -48,13 +218,13 @@ body {
 }
 
 .output .previous-operand {
-	color: rgba(255, 255, 255, 0.75);
+	color: var(--output-previous-operand);
 	font-size: 1.5rem;
 	user-select: all;
 }
 
 .output .current-operand {
-	color: white;
+	color: var(--output-current-operand);
 	font-size: 2.5rem;
 	user-select: all;
 	margin-bottom: 12px;
@@ -75,7 +245,7 @@ body {
 }
 
 .copy-button:active {
-	background-color: rgba(255, 255, 255, 0.25);
+	background-color: var(--output-button-bg);
 	border-radius: 20px;
 }
 
@@ -83,7 +253,32 @@ body {
 	width: 20px;
 }
 
+.history-button-container {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	user-select: none;
+}
+
+.history-button {
+	border: none;
+	background: none;
+	cursor: pointer;
+	padding: 5px;
+}
+
+.history-button:active {
+	background-color: var(--output-button-bg);
+	border-radius: 20px;
+}
+
 .invisible {
 	position: absolute;
+	opacity: 0;
 	left: '99999px';
+}
+
+footer {
+	opacity: 0;
+	user-select: none;
 }

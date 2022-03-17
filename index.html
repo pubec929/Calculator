@@ -10,6 +10,25 @@
 		<title>Calculator</title>
 	</head>
 	<body>
+		<nav class="navbar">
+			<ul class="nav-ul">
+				<li class="nav-item has-dropdown">
+					<a href="#">Theme</a>
+					<ul class="dropdown">
+						<li class="dropdown-item">
+							<a id="green-to-blue" data-theme href="#"></a>
+						</li>
+						<li class="dropdown-item">
+							<a id="blue-to-purple" data-theme href="#"></a>
+						</li>
+						<li class="dropdown-item">
+							<a id="orange-to-red" data-theme href="#"></a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
 		<div class="calculator-grid">
 			<div class="output">
 				<div data-previous-operand class="previous-operand"></div>
@@ -17,6 +36,11 @@
 				<div class="copy-button-container">
 					<button data-copy class="copy-button">
 						<img data-copy src="images/copy.svg" alt="copy" />
+					</button>
+				</div>
+				<div class="history-button-container">
+					<button data-history class="history-button">
+						<img data-history src="images/history.svg" alt="history" />
 					</button>
 				</div>
 			</div>
@@ -41,5 +65,6 @@
 			<button data-number>.</button>
 			<button data-equals>=</button>
 		</div>
+		<footer></footer>
 	</body>
 </html>

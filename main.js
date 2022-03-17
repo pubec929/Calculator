@@ -1,3 +1,4 @@
+// Calculator class with methods
 class Calculator {
 	constructor(
 		previousOperandTextElement,
@@ -17,7 +18,7 @@ class Calculator {
 	}
 
 	delete() {
-		console.log(this.currentOperand, this.previousOperand.includes('='));
+		// console.log(this.currentOperand, this.previousOperand.includes('='));
 		if (this.previousOperand.includes('=')) {
 			this.previousOperand = '';
 		}
@@ -165,6 +166,15 @@ class Calculator {
 	}
 }
 
+// Method for theme switching
+function switchTheme(theme) {
+	body.className = '';
+	body.classList.add(theme);
+}
+
+// Get DOM Elements
+const body = document.body;
+
 const previousOperandTextElement = document.querySelector(
 	'[data-previous-operand]',
 );
@@ -174,6 +184,7 @@ const currentOperandTextElement = document.querySelector(
 
 const copyButton = document.querySelector('[data-copy]');
 
+// Init Calculator
 const calculator = new Calculator(
 	previousOperandTextElement,
 	currentOperandTextElement,
@@ -201,6 +212,8 @@ function handleMouseClick(e) {
 		calculator.changeSign();
 	} else if (e.target.matches('[data-copy')) {
 		calculator.copy();
+	} else if (e.target.matches('[data-theme]')) {
+		switchTheme(e.target.getAttribute('id'));
 	} else {
 		return;
 	}
@@ -209,8 +222,7 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-	console.log(e);
-	let key = e; // asign e to key, cuz e is immutable
+	let key = e; // asign e to key, because e is immutable
 
 	if (key.key === 'Dead') {
 		// key.key is Dead when the ^ key is just clicked once
@@ -226,14 +238,15 @@ function handleKeyPress(e) {
 		else calculator.clear();
 	} else if (key.key === 'Enter') {
 		calculator.compute();
+	} else if (key.key === 'z' && key.ctrlKey) {
+		calculator.undo();
 	} else if (operators.includes(key.key)) {
 		if (key.key === '/' || key.key === ':') {
 			key.key = '÷';
 		}
 		if ((key.key === '-' && key.altKey) || (key.key === '+' && key.altKey)) {
-			console.log('clicked');
 			calculator.changeSign();
 		} else calculator.chooseOperation(key.key);
-	}
+	} else return;
 	calculator.updateDisplay();
 }
