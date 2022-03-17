@@ -50,6 +50,16 @@ class Calculator {
 		}
 	}
 
+	handleOperators(e) {
+		let operator = e.key; // assign e.key to operator so it is mutable
+
+		operator = operator === '/' || operator === ':' ? '÷' : operator;
+		operator = operator === 'Dead' ? '^' : operator;
+		if ((operator === '-' && e.altKey) || (operator === '+' && e.altKey)) {
+			this.changeSign();
+		} else this.chooseOperation(operator);
+	}
+
 	chooseOperation(operation) {
 		if (this.currentOperand === '') return;
 		if (this.previousOperand !== '') {
@@ -85,6 +95,7 @@ class Calculator {
 			default:
 				return;
 		}
+		console.log(computation);
 
 		this.previousOperand = `${this.getDisplayNumber(this.previousOperand)} ${
 			this.operation
@@ -203,7 +214,7 @@ if (theme) {
 document.addEventListener('click', handleMouseClick);
 document.addEventListener('keydown', handleKeyPress);
 
-const operators = ['*', '/', ':', '+', '-', '^']; // valid operators
+const operators = ['*', '/', ':', '+', '-', 'Dead']; // valid operators, Dead is for ^
 
 function handleMouseClick(e) {
 	if (e.target.matches('[data-number]')) {
@@ -230,31 +241,19 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-	let key = e; // asign e to key, because e is immutable
-
-	if (key.key === 'Dead') {
-		// key.key is Dead when the ^ key is just clicked once
-		key.key = '^';
-	}
-
-	if (key.key.match(/[0-9]/) || key.key === '.') {
-		calculator.appendNumber(key.key);
-	} else if (key.key === 'Backspace' || key.key === 'Delete') {
+	if (e.key.match(/[0-9]/) || e.key === '.') {
+		calculator.appendNumber(e.key);
+	} else if (e.key === 'Backspace' || e.key === 'Delete') {
 		calculator.delete();
-	} else if (key.key.toLowerCase() === 'c') {
-		if (key.ctrlKey) calculator.copy();
+	} else if (e.key.toLowerCase() === 'c') {
+		if (e.ctrlKey) calculator.copy();
 		else calculator.clear();
-	} else if (key.key === 'Enter') {
+	} else if (e.key === 'Enter') {
 		calculator.compute();
-	} else if (key.key === 'z' && key.ctrlKey) {
+	} else if (e.key === 'z' && e.ctrlKey) {
 		calculator.undo();
-	} else if (operators.includes(key.key)) {
-		if (key.key === '/' || key.key === ':') {
-			key.key = '÷';
-		}
-		if ((key.key === '-' && key.altKey) || (key.key === '+' && key.altKey)) {
-			calculator.changeSign();
-		} else calculator.chooseOperation(key.key);
+	} else if (operators.includes(e.key)) {
+		calculator.handleOperators(e);
 	} else return;
 	calculator.updateDisplay();
 }
