@@ -243,6 +243,9 @@ a {
 	border: none;
 	background: none;
 	cursor: pointer;
+	display: flex;
+	padding: 4px;
+	border-radius: 5px;
 }
 
 .copy-button:active {
@@ -250,15 +253,12 @@ a {
 	border-radius: 20px;
 }
 
-.copy-button > img {
-	width: 20px;
-}
-
 .history-button {
 	user-select: none;
 	border: none;
 	background: none;
 	cursor: pointer;
+	display: flex;
 	padding: 5px;
 }
 
@@ -272,6 +272,89 @@ a {
 	opacity: 0;
 	left: '99999px';
 }
+
+/* Pop up History */
+
+.modal-history {
+	position: absolute;
+	background: #0e1d3d;
+	padding: 5px;
+	color: var(--nav-text-color);
+	border: none;
+	border-radius: 10px;
+	max-width: 340px;
+	min-width: 340px;
+	min-height: 300px;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+.modal-header {
+	margin: 0px;
+	padding: 0;
+	text-align: center;
+}
+
+.calculations {
+	font-size: 1em;
+	margin: 0;
+	height: 200px;
+	overflow: hidden;
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+
+	gap: 5px;
+}
+
+/* Styling the calculations scrollbar */
+::-webkit-scrollbar {
+	width: 0.4em;
+}
+
+::-webkit-scrollbar-track {
+	background: #0e1d3d;
+	border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb {
+	background: hsl(0 0% 70%);
+	border-radius: 100vw;
+}
+
+.calculation {
+	border-radius: 5px;
+	padding: 7.5px;
+	margin: 0;
+	user-select: all;
+}
+
+.calculation:hover {
+	background: #394367;
+}
+
+.clear-history-button {
+	margin-top: 7px;
+	cursor: pointer;
+	position: relative;
+	user-select: none;
+	right: 0px;
+	background: none;
+	border: none;
+}
+
+.clear-history-button > svg {
+	fill: #fff;
+}
+
+.clear-history-button:hover > svg {
+	fill: red;
+}
+
+.clear-history-button:active > svg {
+	fill: red;
+}
+
+/* Footer */
 
 footer {
 	width: 100%;
@@ -297,4 +380,28 @@ footer {
 
 .text-link:hover {
 	border-bottom: 2px solid #00aaff;
+}
+
+.close-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	padding: 7px;
+	border-radius: 5px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.close-button > svg {
+	fill: white;
+}
+
+.close-button:hover > svg {
+	fill: red;
+}
+
+.close-button:active > svg {
+	fill: red;
 }

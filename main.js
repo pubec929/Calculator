@@ -102,6 +102,9 @@ class Calculator {
 		} ${this.getDisplayNumber(this.currentOperand)} =`;
 		this.currentOperand = computation;
 		this.operation = undefined;
+		history.addCalculation(
+			`${this.previousOperand} ${this.getDisplayNumber(this.currentOperand)}`,
+		);
 	}
 
 	getDisplayNumber(number) {
@@ -177,6 +180,46 @@ class Calculator {
 	}
 }
 
+class calculationsHistory {
+	constructor(modal, calculationsElement) {
+		this.modal = modal; // DOM Element
+		this.calculationsElement = calculationsElement; // DOM Element
+
+		this.calculations = []; // All calculations will be stored here
+	}
+
+	addCalculation(calculation) {
+		// Adds a calculation to the calculations
+		this.calculations.push(calculation);
+
+		let newCalculation = document.createElement('div');
+		newCalculation = this.calculationsElement.insertBefore(
+			newCalculation,
+			this.calculationsElement.firstChild,
+		);
+
+		newCalculation.classList.add('calculation');
+
+		newCalculation.innerText = this.calculations[this.calculations.length - 1];
+	}
+
+	open() {
+		// opens the modal
+		this.modal.showModal();
+	}
+
+	close() {
+		// closes the modal
+		this.modal.close();
+	}
+
+	clear() {
+		this.calculations = [];
+		while (this.calculationsElement.lastChild) {
+			this.calculationsElement.removeChild(this.calculationsElement.lastChild);
+		}
+	}
+}
 // Method for theme switching
 function switchTheme(theme) {
 	body.className = '';
@@ -196,12 +239,18 @@ const currentOperandTextElement = document.querySelector(
 
 const copyButton = document.querySelector('[data-copy]');
 
+const historyModal = document.querySelector('[data-modal]');
+const calculations = document.querySelector('[data-calculations]');
+
 // Init Calculator
 const calculator = new Calculator(
 	previousOperandTextElement,
 	currentOperandTextElement,
 	copyButton,
 );
+
+// Init calculationsHistory
+const history = new calculationsHistory(historyModal, calculations);
 
 // Read from local storage
 const theme = localStorage.getItem('theme');
@@ -233,6 +282,13 @@ function handleMouseClick(e) {
 		calculator.copy();
 	} else if (e.target.matches('[data-theme]')) {
 		switchTheme(e.target.getAttribute('id'));
+	} else if (e.target.matches('[data-history]')) {
+		history.open();
+	} else if (e.target.matches('[data-clear-history]')) {
+		history.clear();
+	} else if (e.target.matches('[data-close-modal]')) {
+		console.log('close');
+		history.close();
 	} else {
 		return;
 	}
@@ -241,6 +297,9 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
+	// If the modal is open, interactivity should be stopped
+	if (history.modal.hasAttribute('open')) return;
+
 	if (e.key.match(/[0-9]/) || e.key === '.') {
 		calculator.appendNumber(e.key);
 	} else if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -250,10 +309,9 @@ function handleKeyPress(e) {
 		else calculator.clear();
 	} else if (e.key === 'Enter') {
 		calculator.compute();
-	} else if (e.key === 'z' && e.ctrlKey) {
-		calculator.undo();
 	} else if (operators.includes(e.key)) {
 		calculator.handleOperators(e);
 	} else return;
+
 	calculator.updateDisplay();
 }
