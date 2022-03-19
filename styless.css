@@ -101,6 +101,10 @@ a {
 	text-decoration: none;
 }
 
+svg {
+	pointer-events: none;
+}
+
 /* Navbar */
 .navbar {
 	color: var(--nav-text-color);
@@ -265,6 +269,11 @@ a {
 .history-button:active {
 	background-color: var(--output-button-bg);
 	border-radius: 20px;
+}
+
+.history-button:focus {
+	/**/
+	border: none;
 }
 
 .invisible {

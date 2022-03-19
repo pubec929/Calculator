@@ -18,7 +18,6 @@ class Calculator {
 	}
 
 	delete() {
-		// console.log(this.currentOperand, this.previousOperand.includes('='));
 		if (this.previousOperand.includes('=')) {
 			this.previousOperand = '';
 		}
@@ -95,7 +94,6 @@ class Calculator {
 			default:
 				return;
 		}
-		console.log(computation);
 
 		this.previousOperand = `${this.getDisplayNumber(this.previousOperand)} ${
 			this.operation
@@ -181,43 +179,40 @@ class Calculator {
 }
 
 class calculationsHistory {
-	constructor(modal, calculationsElement) {
-		this.modal = modal; // DOM Element
-		this.calculationsElement = calculationsElement; // DOM Element
+	constructor(calculations) {
+		this.calculations = calculations != undefined ? calculations : []; // All calculations will be stored here
 
-		this.calculations = []; // All calculations will be stored here
+		if (this.calculations.length != 0) {
+			this.calculations.forEach(this.addToDisplay);
+		}
 	}
 
 	addCalculation(calculation) {
 		// Adds a calculation to the calculations
 		this.calculations.push(calculation);
-
-		let newCalculation = document.createElement('div');
-		newCalculation = this.calculationsElement.insertBefore(
-			newCalculation,
-			this.calculationsElement.firstChild,
-		);
-
-		newCalculation.classList.add('calculation');
-
-		newCalculation.innerText = this.calculations[this.calculations.length - 1];
-	}
-
-	open() {
-		// opens the modal
-		this.modal.showModal();
-	}
-
-	close() {
-		// closes the modal
-		this.modal.close();
+		this.addToDisplay(calculation);
+		localStorage.setItem('history', JSON.stringify(this.calculations));
+		console.log(localStorage);
 	}
 
 	clear() {
 		this.calculations = [];
-		while (this.calculationsElement.lastChild) {
-			this.calculationsElement.removeChild(this.calculationsElement.lastChild);
+		while (calculationsElement.lastChild) {
+			calculationsElement.removeChild(calculationsElement.lastChild);
 		}
+		localStorage.removeItem('history');
+	}
+
+	addToDisplay(value) {
+		let newCalculation = document.createElement('div');
+		newCalculation = calculationsElement.insertBefore(
+			newCalculation,
+			calculationsElement.firstChild,
+		);
+
+		newCalculation.classList.add('calculation');
+
+		newCalculation.innerText = value;
 	}
 }
 // Method for theme switching
@@ -240,7 +235,7 @@ const currentOperandTextElement = document.querySelector(
 const copyButton = document.querySelector('[data-copy]');
 
 const historyModal = document.querySelector('[data-modal]');
-const calculations = document.querySelector('[data-calculations]');
+const calculationsElement = document.querySelector('[data-calculations]');
 
 // Init Calculator
 const calculator = new Calculator(
@@ -249,15 +244,18 @@ const calculator = new Calculator(
 	copyButton,
 );
 
-// Init calculationsHistory
-const history = new calculationsHistory(historyModal, calculations);
-
-// Read from local storage
+// Read theme from local storage
 const theme = localStorage.getItem('theme');
 
 if (theme) {
 	body.classList.add(theme);
 }
+
+// Read history from local storage
+const calculationsArray = JSON.parse(localStorage.getItem('history'));
+
+// Init calculationsHistory
+const history = new calculationsHistory(calculationsArray);
 
 // start Interaction
 document.addEventListener('click', handleMouseClick);
@@ -283,12 +281,11 @@ function handleMouseClick(e) {
 	} else if (e.target.matches('[data-theme]')) {
 		switchTheme(e.target.getAttribute('id'));
 	} else if (e.target.matches('[data-history]')) {
-		history.open();
+		historyModal.showModal();
 	} else if (e.target.matches('[data-clear-history]')) {
 		history.clear();
 	} else if (e.target.matches('[data-close-modal]')) {
-		console.log('close');
-		history.close();
+		historyModal.close();
 	} else {
 		return;
 	}
@@ -298,7 +295,7 @@ function handleMouseClick(e) {
 
 function handleKeyPress(e) {
 	// If the modal is open, interactivity should be stopped
-	if (history.modal.hasAttribute('open')) return;
+	if (historyModal.hasAttribute('open')) return;
 
 	if (e.key.match(/[0-9]/) || e.key === '.') {
 		calculator.appendNumber(e.key);
