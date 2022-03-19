@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<link rel="icon" href="/assets/calculator_icon.29bcb697.png" />
+		<script src="/main.js" defer></script>
+		<title>Calculator</title>
+		<link rel="stylesheet" href="/assets/index.d7f50256.css">
+	</head>
+	<body>
+		<nav class="navbar">
+			<ul class="nav-ul">
+				<li class="nav-item has-dropdown">
+					<a href="#">Theme</a>
+					<ul class="dropdown">
+						<li class="dropdown-item">
+							<a id="green-to-blue" data-theme href="#"></a>
+						</li>
+						<li class="dropdown-item">
+							<a id="blue-to-purple" data-theme href="#"></a>
+						</li>
+						<li class="dropdown-item">
+							<a id="orange-to-red" data-theme href="#"></a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
+		<div class="calculator-grid">
+			<div class="output">
+				<button data-history class="history-button">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink"
+						xmlns:svgjs="http://svgjs.com/svgjs"
+						data-history
+						version="1.1"
+						width="20"
+						height="20"
+						x="0"
+						y="0"
+						viewBox="0 0 24 24"
+						style="enable-background: new 0 0 512 512"
+						xml:space="preserve"
+					>
+						<g>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M12,0A11.972,11.972,0,0,0,4,3.073V1A1,1,0,0,0,2,1V4A3,3,0,0,0,5,7H8A1,1,0,0,0,8,5H5a.854.854,0,0,1-.1-.021A9.987,9.987,0,1,1,2,12a1,1,0,0,0-2,0A12,12,0,1,0,12,0Z"
+								fill="#ffffff"
+								data-original="#000000"
+							/>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M12,6a1,1,0,0,0-1,1v5a1,1,0,0,0,.293.707l3,3a1,1,0,0,0,1.414-1.414L13,11.586V7A1,1,0,0,0,12,6Z"
+								fill="#ffffff"
+								data-original="#000000"
+							/>
+						</g>
+					</svg>
+				</button>
+				<div data-previous-operand class="previous-operand"></div>
+				<div data-current-operand class="current-operand"></div>
+				<button data-copy class="copy-button">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						id="Outline"
+						viewBox="0 0 24 24"
+						data-copy
+						width="20"
+						fill="#fff"
+						height="20"
+					>
+						<path
+							d="M21.155,3.272,18.871.913A3.02,3.02,0,0,0,16.715,0H12A5.009,5.009,0,0,0,7.1,4H7A5.006,5.006,0,0,0,2,9V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5v-.1A5.009,5.009,0,0,0,22,14V5.36A2.988,2.988,0,0,0,21.155,3.272ZM13,22H7a3,3,0,0,1-3-3V9A3,3,0,0,1,7,6v8a5.006,5.006,0,0,0,5,5h4A3,3,0,0,1,13,22Zm4-5H12a3,3,0,0,1-3-3V5a3,3,0,0,1,3-3h4V4a2,2,0,0,0,2,2h2v8A3,3,0,0,1,17,17Z"
+						/>
+					</svg>
+				</button>
+			</div>
+			<button data-all-clear>AC</button>
+			<button data-delete>DEL</button>
+			<button data-operation>^</button>
+			<button data-operation>÷</button>
+			<button data-number>1</button>
+			<button data-number>2</button>
+			<button data-number>3</button>
+			<button data-operation>*</button>
+			<button data-number>4</button>
+			<button data-number>5</button>
+			<button data-number>6</button>
+			<button data-operation>+</button>
+			<button data-number>7</button>
+			<button data-number>8</button>
+			<button data-number>9</button>
+			<button data-operation>-</button>
+			<button data-number>0</button>
+			<button data-sign>-/+</button>
+			<button data-number>.</button>
+			<button data-equals>=</button>
+		</div>
+		<dialog data-modal class="modal-history">
+			<div class="modal-header">
+				<button data-close-modal class="close-button">
+					<svg
+						data-close-modal
+						xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink"
+						xmlns:svgjs="http://svgjs.com/svgjs"
+						version="1.1"
+						width="20"
+						height="20"
+						x="0"
+						y="0"
+						viewBox="0 0 24 24"
+						style="enable-background: new 0 0 512 512"
+						xml:space="preserve"
+					>
+						<g>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M23.707.293h0a1,1,0,0,0-1.414,0L12,10.586,1.707.293a1,1,0,0,0-1.414,0h0a1,1,0,0,0,0,1.414L10.586,12,.293,22.293a1,1,0,0,0,0,1.414h0a1,1,0,0,0,1.414,0L12,13.414,22.293,23.707a1,1,0,0,0,1.414,0h0a1,1,0,0,0,0-1.414L13.414,12,23.707,1.707A1,1,0,0,0,23.707.293Z"
+								data-original="#000000"
+							/>
+						</g>
+					</svg>
+				</button>
+				<h2>History</h2>
+			</div>
+			<div data-calculations class="calculations"></div>
+			<div class="clear-history-container">
+				<button data-clear-history class="clear-history-button">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink"
+						xmlns:svgjs="http://svgjs.com/svgjs"
+						version="1.1"
+						width="20"
+						height="20"
+						x="0"
+						y="0"
+						data-clear-history
+						viewBox="0 0 24 24"
+						style="enable-background: new 0 0 512 512"
+						xml:space="preserve"
+					>
+						<g>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z"
+								data-original="#000000"
+							/>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z"
+								data-original="#000000"
+							/>
+							<path
+								xmlns="http://www.w3.org/2000/svg"
+								d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"
+								data-original="#000000"
+							/>
+						</g>
+					</svg>
+				</button>
+			</div>
+		</dialog>
+		<footer>
+			<div class="text-container">
+				Designed and build by
+				<a class="text-link" href="https://github.com/pubec929" target="_blank"
+					>JustNeymo</a
+				>
+			</div>
+		</footer>
+	</body>
+</html>
