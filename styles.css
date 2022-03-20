@@ -15,57 +15,74 @@
 	);
 
 	--orange-to-red-gradient: linear-gradient(
-		45deg,
-		hsl(3deg 72% 55%) 0%,
-		hsl(11deg 81% 56%) 21%,
-		hsl(18deg 89% 56%) 30%,
-		hsl(24deg 95% 56%) 39%,
-		hsl(30deg 100% 54%) 46%,
-		hsl(37deg 100% 51%) 54%,
-		hsl(42deg 100% 50%) 61%,
-		hsl(47deg 100% 50%) 69%,
-		hsl(51deg 100% 50%) 79%,
-		hsl(56deg 97% 53%) 100%
+		235deg,
+		hsl(0deg 95% 61%) 0%,
+		hsl(6deg 95% 59%) 21%,
+		hsl(12deg 96% 58%) 30%,
+		hsl(18deg 96% 57%) 39%,
+		hsl(24deg 97% 56%) 46%,
+		hsl(31deg 97% 55%) 54%,
+		hsl(37deg 98% 54%) 61%,
+		hsl(43deg 99% 53%) 69%,
+		hsl(49deg 99% 51%) 79%,
+		hsl(55deg 100% 50%) 100%
 	);
 
 	/* Default gradient */
-	--blue-to-purple-gradient: linear-gradient(225deg, #00aaff, #a10add);
+	--blue-to-purple-gradient: linear-gradient(
+		225deg,
+		hsl(200, 100%, 50%),
+		hsl(283, 91%, 45%)
+	);
 
-	/* Colors for default main background */
+	/* default background */
 	--bg: var(--blue-to-purple-gradient);
 
-	/* Colors for output window*/
-	--output-bg: rgba(0, 0, 0, 0.75);
-	/* Text Color of current-operand*/
-	--output-current-operand: rgba(255, 255, 255, 1);
-	/* Text Color of previous-operand */
-	--output-previous-operand: rgba(255, 255, 255, 0.75);
-	/* Background Color of output window buttons*/
-	--output-button-bg: rgb(255, 255, 255, 0.25);
+	/* Colors */
+	--clr-primary: hsl(0, 0%, 0%);
+	--clr-secondary: hsl(0, 0%, 100%);
 
-	/* Colors of calculator grid*/
-	--grid-button-bg: rgba(255, 255, 255, 0.75);
-	--grid-button-bg-hover: rgba(255, 255, 255, 0.9);
-	--grid-button-border: rgba(255, 255, 255, 1);
-	--grid-text-color: rgba(0, 0, 0, 1);
+	--black-80: hsla(0, 0%, 0%, 0.8);
+	--black-75: hsla(0, 0%, 0%, 0.75);
 
-	/* Colors of navbar */
-	--nav-text-color: rgba(255, 255, 255, 1);
-	--nav-bg: rgba(0, 0, 0, 0.75);
-	--nav-dropdown-bg: rgba(255, 255, 255, 0.75);
-	--nav-dropdown-text-color: rgba(0, 0, 0, 1);
+	--white-90: hsla(0, 0%, 100%, 0.9);
+	--white-75: hsla(0, 0%, 100%, 0.75);
+	--white-25: hsla(0, 0%, 100%, 0.25);
 
-	/* Colors of footer */
-	--footer-text-color: rgba(255, 255, 255, 1);
-	--footer-bg: rgba(0, 0, 0, 0.8);
+	--footer-bg-hue: 224;
+	--footer-bg-saturation: 60%;
+	--footer-bg-lightness: 7%;
+
+	--modal-bg-hue: 221;
+	--modal-bg-saturation: 63%;
+	--modal-bg-lightness: 15%;
+
+	/* Cursor Position */
+	--cursor-x: 0px;
+	--cursor-y: 0px;
 }
 
 .green-to-blue {
 	--bg: var(--green-to-blue-gradient);
+
+	--footer-bg-hue: 190;
+	--footer-bg-saturation: 50%;
+	--footer-bg-lightness: 11%;
+
+	--modal-bg-hue: 170;
+	--modal-bg-saturation: 35%;
 }
 
 .orange-to-red {
 	--bg: var(--orange-to-red-gradient);
+
+	/* hsl(18, 73%, 14%)*/
+	--footer-bg-hue: 18;
+	--footer-bg-saturation: 73%;
+	--footer-bg-lightness: 10%;
+
+	--modal-bg-hue: 18;
+	--modal-bg-saturation: 40%;
 }
 
 *,
@@ -74,10 +91,10 @@
 	box-sizing: border-box;
 	font-family: sans-serif;
 	font-weight: normal;
+	/* cursor: none; */
 }
 
 body {
-	/*transition: background 5000ms ease-in-out, color 1000ms ease-in-out;*/
 	padding: 0;
 	margin: 0;
 	background-image: var(--bg);
@@ -89,7 +106,18 @@ body {
 	gap: 20px;
 	min-height: 100vh;
 }
-
+/*
+.cursor {
+	position: absolute;
+	background: #3366cc;
+	width: 25px;
+	height: 25px;
+	border-radius: 25px;
+	top: calc(var(--cursor-y) - 12.5px);
+	left: calc(var(--cursor-x) - 12.5px);
+	pointer-events: none;
+}
+*/
 ul {
 	list-style-type: none;
 	margin: 0;
@@ -105,14 +133,26 @@ svg {
 	pointer-events: none;
 }
 
+button::after {
+	display: block;
+	position: absolute;
+	color: var(--clr-primary);
+	white-space: nowrap;
+	background: var(--white-75);
+	padding: 5px;
+	border-radius: 10px;
+	bottom: 110%;
+	left: 10%;
+}
+
 /* Navbar */
 .navbar {
-	color: var(--nav-text-color);
+	color: var(--clr-secondary);
 	height: 50px;
 	width: 100%;
 	display: flex;
 	flex-direction: row;
-	background-color: var(--nav-bg);
+	background-color: var(--black-75);
 }
 
 .nav-ul {
@@ -137,7 +177,7 @@ svg {
 	width: auto;
 	opacity: 0;
 	z-index: 2;
-	background: var(--nav-dropdown-bg);
+	background: var(--white-75);
 
 	border-bottom-right-radius: 8px;
 	border-bottom-left-radius: 8px;
@@ -149,7 +189,7 @@ svg {
 	margin-top: 2rem;
 	padding: 0.5rem;
 
-	box-shadow: rgba(2, 8, 20, 0.1) 0px 0.175em 0.5em;
+	box-shadow: hsla(220, 82%, 4%, 0.1) 0px 0.175em 0.5em;
 
 	transform: translateX(-30%);
 	transition: opacity 0.15s ease-out;
@@ -167,7 +207,7 @@ svg {
 	size: 0.7rem;
 	font-weight: bold;
 	user-select: none;
-	color: var(--nav-dropdown-text-color);
+	color: var(--clr-primary);
 }
 
 .dropdown-item a::before {
@@ -201,23 +241,23 @@ svg {
 
 .calculator-grid > button {
 	cursor: pointer;
-	color: var(--grid-text-color);
+	color: var(--clr-primary);
 	font-size: 2rem;
-	border: 1px solid var(--grid-button-border);
+	border: 1px solid var(--clr-secondary);
 	outline: none;
-	background-color: var(--grid-button-bg);
+	background-color: var(--white-75);
 	user-select: none;
 }
 
 .calculator-grid > button:hover {
-	background-color: var(--grid-button-bg-hover);
+	background-color: var(--white-90);
 }
 
 .output {
 	grid-column-start: 1;
 	grid-column-end: -1;
 	display: flex;
-	background-color: var(--output-bg);
+	background-color: var(--black-75);
 	align-items: flex-end;
 	justify-content: space-between;
 	flex-direction: column;
@@ -227,7 +267,7 @@ svg {
 }
 
 .output .previous-operand {
-	color: var(--output-previous-operand);
+	color: var(--white-75);
 	font-size: 1.5rem;
 	margin-right: 5px;
 	margin-left: 5px;
@@ -235,7 +275,7 @@ svg {
 }
 
 .output .current-operand {
-	color: var(--output-current-operand);
+	color: var(--clr-secondary);
 	font-size: 2.5rem;
 	margin-right: 5px;
 	margin-left: 5px;
@@ -250,10 +290,24 @@ svg {
 	display: flex;
 	padding: 4px;
 	border-radius: 5px;
+	position: relative;
+}
+
+.copy-button::after {
+	content: attr(data-message) ' ';
+	bottom: 50%;
+	left: -150%;
+	transform: scale(0);
+	transition: transform ease-out 150ms, bottom ease-out 150ms;
+}
+
+.copy-button:hover::after {
+	transform: scale(1);
+	bottom: 100%;
 }
 
 .copy-button:active {
-	background-color: var(--output-button-bg);
+	background-color: var(--white-25);
 	border-radius: 20px;
 }
 
@@ -264,10 +318,25 @@ svg {
 	cursor: pointer;
 	display: flex;
 	padding: 5px;
+	position: relative;
+}
+
+.history-button::after {
+	content: 'See history';
+	bottom: 50%;
+	left: -100%;
+	transform: scale(0);
+	pointer-events: none;
+	transition: transform ease-out 150ms, bottom ease-out 150ms;
+}
+
+.history-button:hover::after {
+	bottom: 120%;
+	transform: scale(1);
 }
 
 .history-button:active {
-	background-color: var(--output-button-bg);
+	background-color: var(--white-25);
 	border-radius: 20px;
 }
 
@@ -286,15 +355,21 @@ svg {
 
 .modal-history {
 	position: absolute;
-	background: #0e1d3d;
+
+	background: hsl(
+		var(--modal-bg-hue),
+		var(--modal-bg-saturation),
+		var(--modal-bg-lightness)
+	);
 	padding: 5px;
-	color: var(--nav-text-color);
+	color: var(--clr-secondary);
 	border: none;
 	border-radius: 10px;
 	max-width: 340px;
 	min-width: 340px;
 	min-height: 300px;
 	word-wrap: break-word;
+	overflow: visible;
 	word-break: break-all;
 }
 .modal-header {
@@ -311,8 +386,46 @@ svg {
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
-
 	gap: 5px;
+}
+
+.calculation {
+	border-radius: 5px;
+	padding: 7.5px;
+	margin: 0;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.calculation:hover {
+	--modal-bg-lightness: 25%;
+
+	background: hsl(
+		var(--modal-bg-hue),
+		var(--modal-bg-saturation),
+		var(--modal-bg-lightness)
+	);
+}
+
+.calculation > p {
+	padding: 0;
+	margin: 0;
+}
+
+.calculation .copy-button {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.calculation:hover .copy-button {
+	opacity: 1;
+	pointer-events: all;
+}
+
+.modal-history .copy-button::after {
+	display: none;
 }
 
 /* Styling the calculations scrollbar */
@@ -321,7 +434,11 @@ svg {
 }
 
 ::-webkit-scrollbar-track {
-	background: #0e1d3d;
+	background: hsl(
+		var(--modal-bg-hue),
+		var(--modal-bg-saturation),
+		var(--modal-bg-lightness)
+	);
 	border-radius: 100vw;
 }
 
@@ -329,18 +446,6 @@ svg {
 	background: hsl(0 0% 70%);
 	border-radius: 100vw;
 }
-
-.calculation {
-	border-radius: 5px;
-	padding: 7.5px;
-	margin: 0;
-	user-select: all;
-}
-
-.calculation:hover {
-	background: #394367;
-}
-
 .clear-history-button {
 	margin-top: 7px;
 	cursor: pointer;
@@ -363,14 +468,31 @@ svg {
 	fill: red;
 }
 
+.clear-history-button::after {
+	content: 'Delete history';
+	left: -100%;
+	transform: scale(0);
+	bottom: 50%;
+	transition: transform ease-out 150ms, bottom ease-out 150ms;
+}
+
+.clear-history-button:hover::after {
+	transform: scale(1);
+	bottom: 110%;
+}
+
 /* Footer */
 
 footer {
 	width: 100%;
 	height: 50px;
 	font-size: 0.7rem;
-	background-color: var(--footer-bg);
-	color: var(--footer-text-color);
+	background-color: hsl(
+		var(--footer-bg-hue),
+		var(--footer-bg-saturation),
+		var(--footer-bg-lightness)
+	);
+	color: var(--clr-secondary);
 	opacity: 1;
 	user-select: none;
 	display: flex;
@@ -379,16 +501,11 @@ footer {
 }
 
 .text-link {
-	/*
-	background: linear-gradient(225deg, #00aaff, #a10add);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	*/
-	color: #00aaff;
+	color: hsl(200, 100%, 50%);
 }
 
 .text-link:hover {
-	border-bottom: 2px solid #00aaff;
+	border-bottom: 2px solid hsl(200, 100%, 50%);
 }
 
 .close-button {
@@ -404,13 +521,13 @@ footer {
 }
 
 .close-button > svg {
-	fill: white;
+	fill: var(--clr-secondary);
 }
 
 .close-button:hover > svg {
-	fill: red;
+	fill: hsl(0, 100%, 50%);
 }
 
 .close-button:active > svg {
-	fill: red;
+	fill: hsl(0, 100%, 50%);
 }

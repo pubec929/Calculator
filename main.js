@@ -154,28 +154,6 @@ class Calculator {
 			this.previousOperandTextElement.innerText = `${this.previousOperand}`;
 		}
 	}
-
-	copy() {
-		if (this.currentOperand === '') {
-			return;
-		}
-
-		const invisibleInput = document.createElement('input');
-
-		invisibleInput.setAttribute('readonly', '');
-
-		invisibleInput.classList.add('invisible');
-
-		document.body.appendChild(invisibleInput);
-
-		invisibleInput.value = this.currentOperand;
-
-		invisibleInput.select();
-
-		document.execCommand('copy');
-
-		document.body.removeChild(invisibleInput);
-	}
 }
 
 class calculationsHistory {
@@ -192,7 +170,6 @@ class calculationsHistory {
 		this.calculations.push(calculation);
 		this.addToDisplay(calculation);
 		localStorage.setItem('history', JSON.stringify(this.calculations));
-		console.log(localStorage);
 	}
 
 	clear() {
@@ -205,6 +182,28 @@ class calculationsHistory {
 
 	addToDisplay(value) {
 		let newCalculation = document.createElement('div');
+		const calculationText = document.createElement('p');
+		const copyButton = document.createElement('button');
+
+		calculationText.innerText = value;
+		copyButton.innerHTML = `<svg
+		xmlns="http://www.w3.org/2000/svg"
+		id="Outline"
+		viewBox="0 0 24 24"
+		data-copy
+		width="20"
+		fill="#fff"
+		height="20"
+		>
+		<path
+			d="M21.155,3.272,18.871.913A3.02,3.02,0,0,0,16.715,0H12A5.009,5.009,0,0,0,7.1,4H7A5.006,5.006,0,0,0,2,9V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5v-.1A5.009,5.009,0,0,0,22,14V5.36A2.988,2.988,0,0,0,21.155,3.272ZM13,22H7a3,3,0,0,1-3-3V9A3,3,0,0,1,7,6v8a5.006,5.006,0,0,0,5,5h4A3,3,0,0,1,13,22Zm4-5H12a3,3,0,0,1-3-3V5a3,3,0,0,1,3-3h4V4a2,2,0,0,0,2,2h2v8A3,3,0,0,1,17,17Z"
+		/>
+		</svg>`;
+
+		copyButton.classList.add('copy-button');
+		copyButton.setAttribute('data-history-copy', undefined);
+		copyButton.setAttribute('data-message', 'Copy to Clipboard');
+
 		newCalculation = calculationsElement.insertBefore(
 			newCalculation,
 			calculationsElement.firstChild,
@@ -212,9 +211,45 @@ class calculationsHistory {
 
 		newCalculation.classList.add('calculation');
 
-		newCalculation.innerText = value;
+		newCalculation.appendChild(calculationText);
+		newCalculation.appendChild(copyButton);
 	}
 }
+
+// Method for copying
+function copy(button, value, isModalOpen = false) {
+	if (value === '') {
+		return;
+	}
+	const container = isModalOpen ? historyModal : body;
+
+	const defaultHMTL = button.innerHTML;
+	const invisibleInput = document.createElement('input');
+
+	invisibleInput.setAttribute('readonly', '');
+
+	invisibleInput.classList.add('invisible');
+
+	container.appendChild(invisibleInput);
+
+	invisibleInput.value = value;
+	invisibleInput.select();
+
+	document.execCommand('copy');
+
+	container.removeChild(invisibleInput);
+
+	button.setAttribute('data-message', 'Copied to clipboard');
+	button.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="20" height="20" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve"><g><path xmlns="http://www.w3.org/2000/svg" d="M22.319,4.431,8.5,18.249a1,1,0,0,1-1.417,0L1.739,12.9a1,1,0,0,0-1.417,0h0a1,1,0,0,0,0,1.417l5.346,5.345a3.008,3.008,0,0,0,4.25,0L23.736,5.847a1,1,0,0,0,0-1.416h0A1,1,0,0,0,22.319,4.431Z" fill="#29e50d" data-original="#000000"/></g></svg>
+	`;
+
+	setTimeout(() => {
+		button.innerHTML = defaultHMTL;
+		button.setAttribute('data-message', 'Copy to clipboard');
+	}, 2500);
+}
+
 // Method for theme switching
 function switchTheme(theme) {
 	body.className = '';
@@ -261,6 +296,9 @@ const history = new calculationsHistory(calculationsArray);
 document.addEventListener('click', handleMouseClick);
 document.addEventListener('keydown', handleKeyPress);
 
+// custom cursor
+//document.addEventListener('mousemove', handleMouseMove);
+
 const operators = ['*', '/', ':', '+', '-', 'Dead']; // valid operators, Dead is for ^
 
 function handleMouseClick(e) {
@@ -277,13 +315,18 @@ function handleMouseClick(e) {
 	} else if (e.target.matches(['[data-sign]'])) {
 		calculator.changeSign();
 	} else if (e.target.matches('[data-copy')) {
-		calculator.copy();
+		copy(e.target, calculator.currentOperand);
 	} else if (e.target.matches('[data-theme]')) {
 		switchTheme(e.target.getAttribute('id'));
 	} else if (e.target.matches('[data-history]')) {
 		historyModal.showModal();
 	} else if (e.target.matches('[data-clear-history]')) {
 		history.clear();
+	} else if (e.target.matches('[data-history-copy]')) {
+		const calculationContainer = e.target.parentElement;
+		const calculationToCopy = calculationContainer.firstElementChild.innerText;
+
+		copy(e.target, calculationToCopy, true);
 	} else if (e.target.matches('[data-close-modal]')) {
 		historyModal.close();
 	} else {
@@ -312,3 +355,11 @@ function handleKeyPress(e) {
 
 	calculator.updateDisplay();
 }
+
+// Custom cursor
+/*
+function handleMouseMove(e) {
+	body.style.setProperty('--cursor-x', e.clientX + 'px');
+	body.style.setProperty('--cursor-y', e.clientY + 'px');
+}
+*/
