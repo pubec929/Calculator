@@ -296,9 +296,6 @@ const history = new calculationsHistory(calculationsArray);
 document.addEventListener('click', handleMouseClick);
 document.addEventListener('keydown', handleKeyPress);
 
-// custom cursor
-//document.addEventListener('mousemove', handleMouseMove);
-
 const operators = ['*', '/', ':', '+', '-', 'Dead']; // valid operators, Dead is for ^
 
 function handleMouseClick(e) {
@@ -355,11 +352,3 @@ function handleKeyPress(e) {
 
 	calculator.updateDisplay();
 }
-
-// Custom cursor
-/*
-function handleMouseMove(e) {
-	body.style.setProperty('--cursor-x', e.clientX + 'px');
-	body.style.setProperty('--cursor-y', e.clientY + 'px');
-}
-*/

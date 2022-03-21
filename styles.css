@@ -49,6 +49,8 @@
 	--white-75: hsla(0, 0%, 100%, 0.75);
 	--white-25: hsla(0, 0%, 100%, 0.25);
 
+	--grey: hsla(0, 0%, 70%);
+
 	--footer-bg-hue: 224;
 	--footer-bg-saturation: 60%;
 	--footer-bg-lightness: 7%;
@@ -91,7 +93,6 @@
 	box-sizing: border-box;
 	font-family: sans-serif;
 	font-weight: normal;
-	/* cursor: none; */
 }
 
 body {
@@ -106,18 +107,7 @@ body {
 	gap: 20px;
 	min-height: 100vh;
 }
-/*
-.cursor {
-	position: absolute;
-	background: #3366cc;
-	width: 25px;
-	height: 25px;
-	border-radius: 25px;
-	top: calc(var(--cursor-y) - 12.5px);
-	left: calc(var(--cursor-x) - 12.5px);
-	pointer-events: none;
-}
-*/
+
 ul {
 	list-style-type: none;
 	margin: 0;
@@ -131,6 +121,7 @@ a {
 
 svg {
 	pointer-events: none;
+	fill: #fff;
 }
 
 button::after {
@@ -170,6 +161,8 @@ button::after {
 
 .nav-item > a:hover {
 	text-decoration: underline;
+	text-decoration-thickness: 3px;
+	text-underline-offset: 0.1em;
 }
 
 .dropdown {
@@ -443,9 +436,21 @@ button::after {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: hsl(0 0% 70%);
+	background: var(--grey);
 	border-radius: 100vw;
 }
+
+/* scrollbar for firefox */
+@supports (scrollbar-color: red blue) {
+	* {
+		scrollbar-color: var(--grey)
+			hsl(
+				var(--modal-bg-hue) var(--modal-bg-saturation) var(--modal-bg-lightness)
+			);
+		scrollbar-width: thin;
+	}
+}
+
 .clear-history-button {
 	margin-top: 7px;
 	cursor: pointer;
@@ -505,7 +510,10 @@ footer {
 }
 
 .text-link:hover {
-	border-bottom: 2px solid hsl(200, 100%, 50%);
+	/*border-bottom: 2px solid hsl(200, 100%, 50%);*/
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.2em;
 }
 
 .close-button {
